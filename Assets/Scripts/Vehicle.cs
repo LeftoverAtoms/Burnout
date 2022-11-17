@@ -4,31 +4,21 @@ public class Vehicle : MonoBehaviour
 {
     public GameObject[] wheels;
 
-    public Vector2 input;
+    private Vector3 input;
 
     private void Start()
     {
+
     }
 
     private void FixedUpdate()
     {
-        wheels[0].transform.rotation = new Quaternion(wheels[0].transform.rotation.x, input.y, input.x, 1f);
-        wheels[1].transform.rotation = new Quaternion(input.y, wheels[1].transform.rotation.x, input.x, 1f);
+        transform.Translate(input.z * transform.forward);
+        transform.Rotate(input.x * transform.up);
     }
 
     private void Update()
     {
-        input = new Vector2(Input.GetAxis("Vertical"), -Input.GetAxis("Horizontal"));
-    }
-}
-
-public class Wheel
-{
-    private void Initialize()
-    {
-    }
-
-    private void Update()
-    {
+        input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
     }
 }
