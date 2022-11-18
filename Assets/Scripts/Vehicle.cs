@@ -6,15 +6,28 @@ public class Vehicle : MonoBehaviour
 
     private Vector3 input;
 
-    private void Start()
-    {
+    private Vector3 acceleration;
+    private Vector3 friction;
+    public Vector3 Velocity;
 
-    }
+    private const float airResistence = 1;
+
+    private float torque;
 
     private void FixedUpdate()
     {
-        transform.Translate(input.z * transform.forward);
-        transform.Rotate(input.x * transform.up);
+        Vector3 v = Velocity;
+
+        Vector3 Ftraction = torque * transform.forward;
+
+        friction = -airResistence * v * v.magnitude;
+
+        float speed = Mathf.Sqrt(v.x * v.x + v.y * v.y);
+
+        //fdrag.x = -Cdrag * v.x * speed;
+        //fdrag.y = -Cdrag * v.y * speed;
+
+        transform.Translate(acceleration * Time.fixedDeltaTime);
     }
 
     private void Update()
