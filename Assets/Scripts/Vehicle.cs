@@ -1,37 +1,34 @@
 using UnityEngine;
 
-public class Vehicle : MonoBehaviour
+namespace StuntGame
 {
-    public GameObject[] wheels;
-
-    private Vector3 input;
-
-    private Vector3 acceleration;
-    private Vector3 friction;
-    public Vector3 Velocity;
-
-    private const float airResistence = 1;
-
-    private float torque;
-
-    private void FixedUpdate()
+    public class Vehicle : MonoBehaviour
     {
-        Vector3 v = Velocity;
+        public GameObject[] wheels;
 
-        Vector3 Ftraction = torque * transform.forward;
+        private Vector3 input;
 
-        friction = -airResistence * v * v.magnitude;
+        /*
+        private Vector3 acceleration;
+        private Vector3 friction;
+        public Vector3 Velocity;
+        private const float airResistence = 1;
+        private float torque;
+        */
 
-        float speed = Mathf.Sqrt(v.x * v.x + v.y * v.y);
+        public float weight;
+        public float dispersedWeight; // Weight that each wheel must support. (Based on amount of wheels on the ground)
 
-        //fdrag.x = -Cdrag * v.x * speed;
-        //fdrag.y = -Cdrag * v.y * speed;
+        [Header("Wheels")]
+        [SerializeField] public Spring spring;
 
-        transform.Translate(acceleration * Time.fixedDeltaTime);
-    }
+        private void FixedUpdate()
+        {
+        }
 
-    private void Update()
-    {
-        input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        private void Update()
+        {
+            input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        }
     }
 }
