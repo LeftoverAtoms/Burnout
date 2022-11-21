@@ -2678,21 +2678,24 @@ MonoBehaviour:
   body: {fileID: 1650719695}
   spring:
     length: 0
-    Range: {x: 0, y: 0}
-    damping: 0
-    stiffness: 0
-    restLength: 0
+    Range: {x: 0.25, y: 1}
+    damping: 0.5
+    stiffness: 15000
+    restLength: 0.25
   wheels:
   - name: Front Left
-    attachPoint: {fileID: 0}
+    model: {fileID: 100066, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
+    localPos: {x: -1.0181092, y: 0.5652401, z: 1.9556279}
   - name: Front Right
-    attachPoint: {fileID: 0}
+    model: {fileID: 100068, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
+    localPos: {x: 0.98468006, y: 0.5652401, z: 1.9556279}
   - name: Back Left
-    attachPoint: {fileID: 0}
+    model: {fileID: 100070, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
+    localPos: {x: -1.0181094, y: 0.56523997, z: -1.8353074}
   - name: Back Right
-    attachPoint: {fileID: 0}
-  wheelModel: {fileID: 100066, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
-  wheelRadius: 0
+    model: {fileID: 100072, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
+    localPos: {x: 0.98468006, y: 0.5652402, z: -1.8353075}
+  wheelRadius: 0.5
 --- !u!4 &251498752
 Transform:
   m_ObjectHideFlags: 0
@@ -3586,8 +3589,8 @@ Rigidbody:
   m_Mass: 1410
   m_Drag: 0
   m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

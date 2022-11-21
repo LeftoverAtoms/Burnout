@@ -12,8 +12,11 @@ namespace StuntGame
 
             var obj = target as Vehicle;
 
-            obj.wheelRadius = EditorGUILayout.FloatField("Wheel Radius", obj.wheelRadius);
-            obj.wheelModel = (GameObject)EditorGUILayout.ObjectField(obj.wheelModel, typeof(GameObject), true);
+            obj.spring.Range = EditorGUILayout.Vector2Field("Spring Range", obj.spring.Range);
+            obj.spring.damping = EditorGUILayout.FloatField("Wheel Radius", obj.wheelRadius);
+            obj.spring.damping = EditorGUILayout.FloatField("Damper", obj.spring.damping);
+            obj.spring.stiffness = EditorGUILayout.FloatField("Stiffness", obj.spring.stiffness);
+            obj.spring.restLength = EditorGUILayout.FloatField("Rest Length", obj.spring.restLength);
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("wheels"), true);
