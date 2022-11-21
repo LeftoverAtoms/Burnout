@@ -4,31 +4,37 @@ namespace StuntGame
 {
     public class Vehicle : MonoBehaviour
     {
-        public GameObject[] wheels;
-
+        public Rigidbody body;
         private Vector3 input;
 
-        /*
-        private Vector3 acceleration;
-        private Vector3 friction;
-        public Vector3 Velocity;
-        private const float airResistence = 1;
-        private float torque;
-        */
+        [SerializeField]
+        public Spring spring;
 
-        public float weight;
-        public float dispersedWeight; // Weight that each wheel must support. (Based on amount of wheels on the ground)
-
-        [Header("Wheels")]
-        [SerializeField] public Spring spring;
-
-        private void FixedUpdate()
-        {
-        }
+        public Wheel[] wheels = new Wheel[4];
+        public GameObject wheelModel;
+        public float wheelRadius;
 
         private void Update()
         {
             input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         }
+
+        /*
+        private void GetWheelPosition()
+        {
+            if(Physics.Raycast(new Ray(transform.position, -transform.up), out RaycastHit hit, spring.maxRange + wheelRadius))
+            {
+                float prevLength = spring.length;
+
+                spring.length = hit.distance - wheelRadius;
+                spring.length = Mathf.Clamp(spring.length, spring.minRange, spring.maxRange);
+
+                float velocity = (prevLength - spring.length) / Time.fixedDeltaTime;
+                float force = spring.stiffness * (spring.restLength - spring.length) + spring.damping * velocity;
+
+                body.AddForceAtPosition(force * transform.up, hit.point);
+            }
+        }
+        */
     }
 }
