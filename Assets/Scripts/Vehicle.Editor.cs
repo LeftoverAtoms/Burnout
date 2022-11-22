@@ -1,3 +1,4 @@
+/*
 using UnityEditor;
 using UnityEngine;
 
@@ -34,3 +35,4 @@ namespace StuntGame
         }
     }
 }
+*/

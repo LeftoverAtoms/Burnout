@@ -38,18 +38,16 @@ namespace StuntGame
                 float velocity = (prevLength - spring.length) / Time.fixedDeltaTime;
                 float force = owner.spring.stiffness * (owner.spring.restLength - spring.length) + owner.spring.damping * velocity;
 
-                //owner.body.AddForceAtPosition(force * owner.transform.up, hit.point);
+                owner.body.AddForceAtPosition(force * owner.transform.up, hit.point);
 
-                //Debug.Log($"Force: {force} || Velocity: {velocity} || Length: {spring.length}");
-
-                Debug.Log(hit.rigidbody.gameObject.name);
+                //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Length: {spring.length}");
             }
             else
             {
-                spring.length = owner.spring.minRange;
+                spring.length = owner.spring.maxRange;
             }
 
-            model.transform.localPosition = new Vector3(localPos.x, localPos.y + spring.length, localPos.z);
+            model.transform.localPosition = new Vector3(localPos.x, localPos.y - spring.length, localPos.z);
         }
     }
 }
