@@ -2678,23 +2678,23 @@ MonoBehaviour:
   body: {fileID: 1650719695}
   spring:
     length: 0
-    Range: {x: -0.075, y: 0.15}
+    Range: {x: -0.25, y: 0.25}
     damping: 4000
-    stiffness: 15000
+    stiffness: 25000
     restLength: 0.25
   wheels:
   - name: Front Left
-    model: {fileID: 100066, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
-    localPos: {x: -1.0181092, y: 0.5652401, z: 1.9556279}
+    model: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
+    localPosition: {x: -1, y: 0.5, z: 1.9}
   - name: Front Right
-    model: {fileID: 100068, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
-    localPos: {x: 0.98468006, y: 0.5652401, z: 1.9556279}
+    model: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
+    localPosition: {x: 1, y: 0.5, z: 1.9}
   - name: Back Left
-    model: {fileID: 100070, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
-    localPos: {x: -1.0181094, y: 0.56523997, z: -1.8353074}
+    model: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
+    localPosition: {x: -1, y: 0.5, z: -1.9}
   - name: Back Right
-    model: {fileID: 100072, guid: 0c0710b504ff10a4fbee350432e8f7ed, type: 3}
-    localPos: {x: 0.98468006, y: 0.5652402, z: -1.8353075}
+    model: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
+    localPosition: {x: 1, y: 0.5, z: -1.9}
   wheelRadius: 0.5
 --- !u!4 &251498752
 Transform:

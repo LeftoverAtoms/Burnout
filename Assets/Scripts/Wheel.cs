@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace StuntGame
 {
-    [System.Serializable]
+    [Serializable]
     public class Wheel
     {
         [HideInInspector]
@@ -12,12 +13,12 @@ namespace StuntGame
         private Spring spring;
 
         public GameObject model;
-        public Vector3 localPos;
+        public Vector3 localPosition;
 
         public void Init(Vehicle parent)
         {
             owner = parent;
-            model = GameObject.Instantiate(model, localPos, default);
+            model = GameObject.Instantiate(model, localPosition, model.transform.rotation);
             model.transform.parent = owner.transform;
         }
 
@@ -28,9 +29,10 @@ namespace StuntGame
             spring.restLength = owner.spring.restLength;
             spring.stiffness = owner.spring.stiffness;
 
-            if (Physics.Raycast(new Ray(owner.transform.position + localPos, -owner.transform.up), out RaycastHit hit, owner.spring.maxRange + owner.wheelRadius))
+            // Counteract force if tire if fully compressed.
+            if (Physics.Raycast(new Ray(owner.transform.TransformPoint(localPosition), -owner.transform.up), out RaycastHit hit, owner.spring.maxRange + owner.wheelRadius))
             {
-                float prevLength = spring.length;
+                var prevLength = spring.length;
 
                 spring.length = hit.distance - owner.wheelRadius;
                 spring.length = Mathf.Clamp(spring.length, owner.spring.minRange, owner.spring.maxRange);
@@ -46,8 +48,11 @@ namespace StuntGame
             {
                 spring.length = owner.spring.maxRange;
             }
+        }
 
-            model.transform.localPosition = new Vector3(localPos.x, localPos.y - spring.length, localPos.z);
+        public void Update()
+        {
+            model.transform.localPosition = new Vector3(localPosition.x, localPosition.y - spring.length, localPosition.z);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace StuntGame
 
         public Vector2 Range;
         public float damping, stiffness, restLength;
+        //public bool isCompressed;
     }
 }
