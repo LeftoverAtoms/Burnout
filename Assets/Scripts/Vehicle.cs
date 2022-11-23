@@ -16,6 +16,8 @@ namespace StuntGame
         private void Start()
         {
             foreach (var wheel in wheels) wheel.Init(this);
+
+            body.AddForce(transform.forward * 50000f, ForceMode.Impulse);
         }
 
         private void FixedUpdate()

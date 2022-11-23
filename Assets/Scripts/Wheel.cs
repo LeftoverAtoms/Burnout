@@ -20,10 +20,12 @@ namespace StuntGame
             owner = parent;
             model = GameObject.Instantiate(model, localPosition, model.transform.rotation);
             model.transform.parent = owner.transform;
+            model.AddComponent<SphereCollider>().radius = owner.wheelRadius * 0.5f;
         }
 
         public void FixedUpdate()
         {
+            // Debug refresh variables from vehicle.
             spring.Range = owner.spring.Range;
             spring.damping = owner.spring.damping;
             spring.restLength = owner.spring.restLength;
@@ -32,6 +34,9 @@ namespace StuntGame
             // Counteract force if tire if fully compressed.
             if (Physics.Raycast(new Ray(owner.transform.TransformPoint(localPosition), -owner.transform.up), out RaycastHit hit, owner.spring.maxRange + owner.wheelRadius))
             {
+                if(hit.transform.IsChildOf(owner.transform))
+                    return;
+
                 var prevLength = spring.length;
 
                 spring.length = hit.distance - owner.wheelRadius;
@@ -43,6 +48,7 @@ namespace StuntGame
                 owner.body.AddForceAtPosition(force * owner.transform.up, hit.point);
 
                 //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Length: {spring.length}");
+                Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.stiffness * owner.body.mass)}");
             }
             else
             {
