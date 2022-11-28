@@ -2759,8 +2759,8 @@ MonoBehaviour:
       Range: {x: 0, y: 0.5}
       strength: 30000
       damping: 2000
-      restLength: 0.5
-    localPosition: {x: -1, y: 0.5, z: 1.9}
+      restLength: 1
+    localPosition: {x: -1, y: 0.5, z: 1.95}
     entity: {fileID: 0}
   - name: Front Right
     owner: {fileID: 251366340}
@@ -2769,8 +2769,8 @@ MonoBehaviour:
       Range: {x: 0, y: 0.5}
       strength: 30000
       damping: 2000
-      restLength: 0.5
-    localPosition: {x: 1, y: 0.5, z: 1.9}
+      restLength: 1
+    localPosition: {x: 1, y: 0.5, z: 1.95}
     entity: {fileID: 0}
   - name: Back Left
     owner: {fileID: 251366340}
@@ -2779,8 +2779,8 @@ MonoBehaviour:
       Range: {x: 0, y: 0.5}
       strength: 30000
       damping: 2000
-      restLength: 0.5
-    localPosition: {x: -1, y: 0.5, z: -1.9}
+      restLength: 1
+    localPosition: {x: -1, y: 0.5, z: -1.825}
     entity: {fileID: 0}
   - name: Back Right
     owner: {fileID: 251366340}
@@ -2789,8 +2789,8 @@ MonoBehaviour:
       Range: {x: 0, y: 0.5}
       strength: 30000
       damping: 2000
-      restLength: 0.5
-    localPosition: {x: 1, y: 0.5, z: -1.9}
+      restLength: 1
+    localPosition: {x: 1, y: 0.5, z: -1.825}
     entity: {fileID: 0}
   body: {fileID: 1650719695}
   spring:
@@ -2798,7 +2798,7 @@ MonoBehaviour:
     Range: {x: 0, y: 0.5}
     strength: 30000
     damping: 2000
-    restLength: 0.5
+    restLength: 1
   wheelRadius: 0.5
 --- !u!4 &251498752
 Transform:
@@ -3766,8 +3766,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.5, y: 1, z: 5.5}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Size: {x: 2.5, y: 2, z: 5.5}
+  m_Center: {x: 0, y: 1.4, z: 0}
 --- !u!1 &2105165046
 GameObject:
   m_ObjectHideFlags: 0

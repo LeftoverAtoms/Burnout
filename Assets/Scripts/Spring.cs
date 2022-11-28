@@ -8,7 +8,7 @@ namespace Stunt
     {
         [HideInInspector] public float maxRange => Range.x;
         [HideInInspector] public float minRange => Range.y;
-        [HideInInspector] public float offset;
+        [HideInInspector] public float force, offset;
 
         public Vector2 Range;
         public float strength, damping, restLength;

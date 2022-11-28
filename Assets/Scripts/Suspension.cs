@@ -32,19 +32,14 @@ namespace Stunt
             {
                 float velocity = owner.body.GetPointVelocity(position).y;
 
-                spring.offset = spring.restLength - hit.distance + owner.wheelRadius;
+                spring.offset = spring.restLength - hit.distance;
 
-                float force = (spring.offset * spring.strength) - (velocity * spring.damping);
+                spring.force = (spring.offset * spring.strength) - (velocity * spring.damping);
 
-                if(hit.distance < 0.25f) // [HACK] High speeds resulted in the wheels falling through the floor.
-                {
-                    owner.body.velocity = Vector3.zero;
-                }
-
-                owner.body.AddForceAtPosition(force * owner.transform.up, position);
+                owner.body.AddForceAtPosition(spring.force * owner.transform.up, position);
 
                 //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Offset: {spring.offset}");
-                //Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
+                Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
             }
             else
             {

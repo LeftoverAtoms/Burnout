@@ -26,6 +26,8 @@ namespace Stunt
 
         private void FixedUpdate()
         {
+            body.velocity = new Vector3(0f, Mathf.Clamp(body.velocity.y, -54f, 54f), 0f);
+
             foreach(var obj in suspension) obj.FixedUpdate();
         }
 
