@@ -36,6 +36,11 @@ namespace Stunt
 
                 float force = (spring.offset * spring.strength) - (velocity * spring.damping);
 
+                if(hit.distance < 0.25f) // [HACK] High speeds resulted in the wheels falling through the floor.
+                {
+                    owner.body.velocity = Vector3.zero;
+                }
+
                 owner.body.AddForceAtPosition(force * owner.transform.up, position);
 
                 //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Offset: {spring.offset}");
