@@ -25,25 +25,30 @@ namespace Stunt
 
         public void FixedUpdate()
         {
-            Vector3 srt = position + new Vector3(0f, spring.maxRange + owner.wheelRadius, 0f);
-            Vector3 end = position - new Vector3(0f, spring.minRange + owner.wheelRadius, 0f);
-
-            if(Physics.Linecast(srt, end, out RaycastHit hit))
+            int amt = 32;
+            float angle = 180f / (amt - 1);
+            float curAngle = 0;
+            for(int i = 0; i < amt; i++)
             {
-                float velocity = owner.body.GetPointVelocity(position).y;
+                if(Physics.Raycast(position, new Vector3(curAngle, 0, 0), out RaycastHit hit, owner.wheelRadius + 0.1f))
+                {
+                    Vector3 velocity = owner.body.GetPointVelocity(position);
 
-                spring.offset = spring.restLength - hit.distance;
+                    spring.offset = spring.restLength - hit.distance;
 
-                spring.force = (spring.offset * spring.strength) - (velocity * spring.damping);
+                    spring.force = (spring.offset * spring.strength) - (velocity.y * spring.damping);
 
-                owner.body.AddForceAtPosition(spring.force * owner.transform.up, position);
+                    owner.body.AddForceAtPosition(spring.force * owner.transform.up, position);
 
-                //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Offset: {spring.offset}");
-                Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
-            }
-            else
-            {
-                spring.offset = spring.maxRange - owner.wheelRadius;
+                    //Debug.Log($"Name: {name} || Force: {force} || Velocity: {velocity} || Offset: {spring.offset}");
+                    //Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
+                }
+                else
+                {
+                    spring.offset = spring.maxRange - owner.wheelRadius;
+                }
+
+                curAngle += angle;
             }
         }
 

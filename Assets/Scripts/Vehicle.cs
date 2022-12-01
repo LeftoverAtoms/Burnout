@@ -1,4 +1,6 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
+using UnityEngine.UIElements;
 
 namespace Stunt
 {
@@ -17,6 +19,8 @@ namespace Stunt
 
         private void Start()
         {
+            //body.AddForce(100000f * transform.forward, ForceMode.Impulse);
+
             foreach(var obj in suspension) obj.Init(this);
             suspension[0].name = "Front Left";
             suspension[1].name = "Front Right";
@@ -26,7 +30,8 @@ namespace Stunt
 
         private void FixedUpdate()
         {
-            body.velocity = new Vector3(0f, Mathf.Clamp(body.velocity.y, -54f, 54f), 0f);
+            // Gravity
+            body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
 
             foreach(var obj in suspension) obj.FixedUpdate();
         }
@@ -56,6 +61,18 @@ namespace Stunt
 
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawSphere(obj.position + new Vector3(0f, obj.spring.offset, 0f), 0.1f);
+
+                Gizmos.color = Color.magenta;
+
+                int amt = 8;
+                float angle = 180f / (amt - 1);
+                float curAngle = 0;
+                for(int i = 0; i < amt; i++)
+                {
+                    Vector3 end = Quaternion.Euler(new Vector3(curAngle, 0, 0)) * new Vector3(obj.position.x, obj.position.y - wheelRadius, obj.position.z);
+                    Gizmos.DrawLine(obj.position, end);
+                    curAngle += angle;
+                }
             }
         }
     }
