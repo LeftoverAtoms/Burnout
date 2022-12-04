@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Stunt
+namespace Burnout
 {
     [Serializable]
     public struct Spring
