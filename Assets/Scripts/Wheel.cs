@@ -1,11 +1,10 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Burnout
 {
     [Serializable]
-    public class Suspension
+    public class Wheel
     {
         [HideInInspector] public string name;
 

@@ -5,7 +5,7 @@ namespace Burnout
     public class Vehicle : MonoBehaviour
     {
         public GameObject wheelPrefab;
-        public Suspension[] suspension = new Suspension[4];
+        public Wheel[] wheels = new Wheel[4];
 
         public Rigidbody body;
         private Vector3 input;
@@ -19,14 +19,14 @@ namespace Burnout
         {
             body.AddForce(10000f * transform.forward, ForceMode.Impulse);
 
-            foreach(var obj in suspension)
+            foreach(var obj in wheels)
             {
                 obj.Init(this);
             }
-            suspension[0].name = "Front Left";
-            suspension[1].name = "Front Right";
-            suspension[2].name = "Back Left";
-            suspension[3].name = "Back Right";
+            wheels[0].name = "Front Left";
+            wheels[1].name = "Front Right";
+            wheels[2].name = "Back Left";
+            wheels[3].name = "Back Right";
         }
 
         private void FixedUpdate()
@@ -34,7 +34,7 @@ namespace Burnout
             // Gravity
             body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
 
-            foreach(var obj in suspension)
+            foreach(var obj in wheels)
             {
                 obj.FixedUpdate();
             }
@@ -42,7 +42,7 @@ namespace Burnout
 
         private void Update()
         {
-            foreach(var obj in suspension)
+            foreach(var obj in wheels)
             {
                 obj.Update();
             }
@@ -52,7 +52,7 @@ namespace Burnout
 
         private void OnValidate()
         {
-            foreach(var obj in suspension)
+            foreach(var obj in wheels)
             {
                 obj.UpdateValues();
             }
@@ -60,7 +60,7 @@ namespace Burnout
 
         private void OnDrawGizmos()
         {
-            foreach(var obj in suspension)
+            foreach(var obj in wheels)
             {
                 //Gizmos.color = Color.red;
                 //Gizmos.DrawWireSphere(obj.transform.position + new Vector3(0f, spring.maxRange + wheelRadius, 0f), 0.1f);

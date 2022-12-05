@@ -2769,49 +2769,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wheelPrefab: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
-  suspension:
-  - name: Front Left
-    owner: {fileID: 251366340}
+  wheels:
+  - name: 
+    owner: {fileID: 0}
     spring:
       force: 0
-      offset: -0.5
-      Range: {x: 0, y: 0.5}
-      strength: 1000
-      damping: 100
-      restLength: 1
+      offset: 0
+      Range: {x: 0, y: 0}
+      strength: 0
+      damping: 0
+      restLength: 0
     transform: {fileID: 1477252065}
     entity: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
-  - name: Front Left
-    owner: {fileID: 251366340}
+  - name: 
+    owner: {fileID: 0}
     spring:
       force: 0
-      offset: -0.5
-      Range: {x: 0, y: 0.5}
-      strength: 1000
-      damping: 100
-      restLength: 1
+      offset: 0
+      Range: {x: 0, y: 0}
+      strength: 0
+      damping: 0
+      restLength: 0
     transform: {fileID: 773410404}
     entity: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
-  - name: Front Left
-    owner: {fileID: 251366340}
+  - name: 
+    owner: {fileID: 0}
     spring:
       force: 0
-      offset: -0.5
-      Range: {x: 0, y: 0.5}
-      strength: 1000
-      damping: 100
-      restLength: 1
+      offset: 0
+      Range: {x: 0, y: 0}
+      strength: 0
+      damping: 0
+      restLength: 0
     transform: {fileID: 1870214597}
     entity: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
-  - name: Front Left
-    owner: {fileID: 251366340}
+  - name: 
+    owner: {fileID: 0}
     spring:
       force: 0
-      offset: -0.5
-      Range: {x: 0, y: 0.5}
-      strength: 1000
-      damping: 100
-      restLength: 1
+      offset: 0
+      Range: {x: 0, y: 0}
+      strength: 0
+      damping: 0
+      restLength: 0
     transform: {fileID: 781080973}
     entity: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
   body: {fileID: 1650719695}
