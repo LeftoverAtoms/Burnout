@@ -4,8 +4,7 @@ namespace Burnout
 {
     public class Vehicle : MonoBehaviour
     {
-        public GameObject wheelPrefab;
-        public Wheel[] wheels = new Wheel[4];
+        public Wheel[] wheels =  new Wheel[4];
 
         public Rigidbody body;
         private Vector3 input;
@@ -13,20 +12,16 @@ namespace Burnout
         [SerializeField]
         public Spring spring;
 
+        public int wheelCount;
+        public GameObject wheelPrefab;
         public float wheelRadius;
 
         private void Start()
         {
             body.AddForce(10000f * transform.forward, ForceMode.Impulse);
 
-            foreach(var obj in wheels)
-            {
-                obj.Init(this);
-            }
-            wheels[0].name = "Front Left";
-            wheels[1].name = "Front Right";
-            wheels[2].name = "Back Left";
-            wheels[3].name = "Back Right";
+            for(int i = 0; i < wheelCount; i++)
+                wheels[i].Init(this);
         }
 
         private void FixedUpdate()
@@ -35,27 +30,21 @@ namespace Burnout
             body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
 
             foreach(var obj in wheels)
-            {
                 obj.FixedUpdate();
-            }
         }
 
         private void Update()
         {
-            foreach(var obj in wheels)
-            {
-                obj.Update();
-            }
-
             input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            foreach(var obj in wheels)
+                obj.Update();
         }
 
         private void OnValidate()
         {
             foreach(var obj in wheels)
-            {
                 obj.UpdateValues();
-            }
         }
 
         private void OnDrawGizmos()
@@ -85,6 +74,7 @@ namespace Burnout
                 var offset = (angle * (amount / 2f)) + (180 - sum);
                 for(uint i = 0; i < amount; i++)
                 {
+                    // This doesn't work at school because pattern matching was introduced in C# 8.0
                     var c = (float)i / amount;
                     switch(c)
                     {

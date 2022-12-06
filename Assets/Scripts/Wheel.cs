@@ -13,15 +13,18 @@ namespace Burnout
 
         public Transform transform;
 
-        public GameObject entity;
+        private GameObject entity;
 
         public void Init(Vehicle parent)
         {
             owner = parent;
-            //entity = GameObject.Instantiate(owner.wheelPrefab, transform.localPosition, owner.wheelPrefab.transform.rotation);
-            //entity.transform.parent = owner.transform;
 
             transform.position = owner.transform.TransformPoint(transform.localPosition);
+
+            UpdateValues();
+
+            //entity = GameObject.Instantiate(owner.wheelPrefab, transform.localPosition, owner.wheelPrefab.transform.rotation);
+            //entity.transform.parent = owner.transform;
         }
 
         public void FixedUpdate()
@@ -31,7 +34,7 @@ namespace Burnout
 
         public void Update()
         {
-            entity.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + spring.offset, transform.localPosition.z);
+            //entity.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + spring.offset, transform.localPosition.z);
         }
 
         private void CastRays(float arc, uint iterations, float radius)
@@ -81,10 +84,15 @@ namespace Burnout
 
         public void UpdateValues()
         {
-            spring.Range = owner.spring.Range;
-            spring.damping = owner.spring.damping;
-            spring.restLength = owner.spring.restLength;
-            spring.strength = owner.spring.strength;
+            name = transform.name;
+
+            if(owner != null)
+            {
+                spring.Range = owner.spring.Range;
+                spring.damping = owner.spring.damping;
+                spring.restLength = owner.spring.restLength;
+                spring.strength = owner.spring.strength;
+            }
         }
     }
 }
