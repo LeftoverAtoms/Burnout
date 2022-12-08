@@ -11,9 +11,8 @@ namespace Burnout
         [HideInInspector] public Vehicle owner;
         [HideInInspector] public Spring spring;
 
-        public Transform transform;
-
         private GameObject entity;
+        public Transform transform;
 
         public void Init(Vehicle parent)
         {
@@ -39,7 +38,7 @@ namespace Burnout
 
         private void CastRays(float arc, uint iterations, float radius)
         {
-            arc = Mathf.Clamp(arc, 0, 180);
+            arc = Mathf.Clamp(arc, 0, 360);
 
             float angle = (arc / iterations);
             float currentAngle = (angle / 2);
@@ -49,12 +48,12 @@ namespace Burnout
             RaycastHit hit = default;
             bool rayhit = false;
 
-            for(uint i = 0; i < iterations; i++)
+            for (uint i = 0; i < iterations; i++)
             {
                 Vector3 rot = transform.rotation.eulerAngles;
                 Quaternion dir = owner.transform.rotation * Quaternion.Euler(currentAngle + offset, rot.y, -rot.z);
 
-                if(Physics.Raycast(transform.position, dir * owner.transform.up, out hit, owner.wheelRadius + 0.1f))
+                if (Physics.Raycast(transform.position, dir * owner.transform.up, out hit, owner.wheelRadius + 0.1f))
                 {
                     rayhit = true;
 
@@ -64,7 +63,8 @@ namespace Burnout
 
                     spring.force = (spring.offset * spring.strength) - (velocity.y * spring.damping);
 
-                    owner.body.AddForceAtPosition(spring.force * owner.transform.up, transform.position);
+                    Vector3 force = new Vector3( 0f, spring.force, 0f );
+                    owner.body.AddForceAtPosition(force, transform.position);
 
                     //Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
                 }
@@ -72,21 +72,15 @@ namespace Burnout
                 currentAngle += angle;
             }
 
-            if(rayhit)
-            {
-                spring.offset = spring.restLength - hit.distance;
-            }
-            else
-            {
-                spring.offset = spring.maxRange - owner.wheelRadius;
-            }
+            if (rayhit) { spring.offset = spring.restLength - hit.distance; }
+            else { spring.offset = spring.maxRange - owner.wheelRadius; }
         }
 
         public void UpdateValues()
         {
             name = transform.name;
 
-            if(owner != null)
+            if (owner != null)
             {
                 spring.Range = owner.spring.Range;
                 spring.damping = owner.spring.damping;
