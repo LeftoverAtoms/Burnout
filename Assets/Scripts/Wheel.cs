@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Burnout
 {
@@ -11,8 +12,10 @@ namespace Burnout
         [HideInInspector] public Vehicle owner;
         [HideInInspector] public Spring spring;
 
-        private GameObject entity;
+        //private GameObject entity;
         public Transform transform;
+
+        private Vector3 wishVelocity = Vector3.zero;
 
         public void Init(Vehicle parent)
         {
@@ -28,52 +31,51 @@ namespace Burnout
 
         public void FixedUpdate()
         {
-            CastRays(135, 32, 0);
+            CastRays(100, 10);
+
+            owner.body.AddForceAtPosition(wishVelocity, transform.position, ForceMode.Acceleration);
         }
 
         public void Update()
         {
-            //entity.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + spring.offset, transform.localPosition.z);
         }
 
-        private void CastRays(float arc, uint iterations, float radius)
+        // NOTE: These variables should only be calculated once! NOT EVERY PHYSICS FRAME!
+        private void CastRays(float degrees, float iterations)
         {
-            arc = Mathf.Clamp(arc, 0, 360);
+            degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/Circles are limited to 0-360 degrees.
 
-            float angle = (arc / iterations);
-            float currentAngle = (angle / 2);
+            float angleDiff = (degrees / iterations); // Degrees between each raycast.
+            float angleCurr = (angleDiff / 2);
 
-            var offset = (angle * (iterations / 2f)) + (180 - arc);
+            float rotationOffset = (angleDiff * (iterations / 2)) + (180 - degrees); // MAGIC!
 
-            RaycastHit hit = default;
-            bool rayhit = false;
+            float avgForce = 0;
+            int contacts = 0;
 
             for (uint i = 0; i < iterations; i++)
             {
-                Vector3 rot = transform.rotation.eulerAngles;
-                Quaternion dir = owner.transform.rotation * Quaternion.Euler(currentAngle + offset, rot.y, -rot.z);
+                Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, transform.right); // Pure hatred for Quaternions.
 
-                if (Physics.Raycast(transform.position, dir * owner.transform.up, out hit, owner.wheelRadius + 0.1f))
+                if (Physics.Raycast(transform.position, dir * owner.transform.up, out RaycastHit hit, owner.wheelRadius + 0.1f))
                 {
-                    rayhit = true;
-
                     Vector3 velocity = owner.body.GetPointVelocity(transform.position);
 
                     spring.offset = spring.restLength - hit.distance;
 
-                    spring.force = (spring.offset * spring.strength) - (velocity.y * spring.damping);
-
-                    Vector3 force = new Vector3( 0f, spring.force, 0f );
-                    owner.body.AddForceAtPosition(force, transform.position);
-
-                    //Debug.Log($"Ratio: {spring.damping / Mathf.Sqrt(spring.strength * owner.body.mass)}");
+                    avgForce += (spring.offset * spring.strength) - (velocity.y * spring.damping);
+                    contacts += 1;
                 }
 
-                currentAngle += angle;
+                angleCurr += angleDiff;
             }
 
-            if (rayhit) { spring.offset = spring.restLength - hit.distance; }
-            else { spring.offset = spring.maxRange - owner.wheelRadius; }
+            if (contacts > 0) { wishVelocity.y = avgForce / contacts; }
+            else { wishVelocity.y = 0; }
+
+            Debug.Log(avgForce);
+
+            //entity.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + spring.offset, transform.localPosition.z);
         }
 
         public void UpdateValues()
