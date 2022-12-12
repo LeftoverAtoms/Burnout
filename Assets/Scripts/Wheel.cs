@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace Burnout
 {
@@ -11,17 +10,17 @@ namespace Burnout
 
         [HideInInspector] public Vehicle owner;
         [HideInInspector] public Spring spring;
+        public bool isSteerable;
 
         //private GameObject entity;
         public Transform transform;
 
-        private Vector3 wishVelocity = Vector3.zero;
+        public Vector3 wishVelocity = Vector3.zero;
 
         public void Init(Vehicle parent)
         {
+            transform.position = parent.transform.TransformPoint(transform.localPosition);
             owner = parent;
-
-            transform.position = owner.transform.TransformPoint(transform.localPosition);
 
             UpdateValues();
 
@@ -31,9 +30,9 @@ namespace Burnout
 
         public void FixedUpdate()
         {
-            CastRays(100, 10);
+            Vector3 velocity = CastRays(135, 10);
 
-            owner.body.AddForceAtPosition(wishVelocity, transform.position, ForceMode.Acceleration);
+            owner.body.AddRelativeForce(wishVelocity + velocity, ForceMode.Acceleration);
         }
 
         public void Update()
@@ -41,8 +40,10 @@ namespace Burnout
         }
 
         // NOTE: These variables should only be calculated once! NOT EVERY PHYSICS FRAME!
-        private void CastRays(float degrees, float iterations)
+        private Vector3 CastRays(float degrees, float iterations)
         {
+            Vector3 velocity = owner.body.GetPointVelocity(transform.position);
+
             degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/Circles are limited to 0-360 degrees.
 
             float angleDiff = (degrees / iterations); // Degrees between each raycast.
@@ -59,8 +60,6 @@ namespace Burnout
 
                 if (Physics.Raycast(transform.position, dir * owner.transform.up, out RaycastHit hit, owner.wheelRadius + 0.1f))
                 {
-                    Vector3 velocity = owner.body.GetPointVelocity(transform.position);
-
                     spring.offset = spring.restLength - hit.distance;
 
                     avgForce += (spring.offset * spring.strength) - (velocity.y * spring.damping);
@@ -70,12 +69,7 @@ namespace Burnout
                 angleCurr += angleDiff;
             }
 
-            if (contacts > 0) { wishVelocity.y = avgForce / contacts; }
-            else { wishVelocity.y = 0; }
-
-            Debug.Log(avgForce);
-
-            //entity.transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + spring.offset, transform.localPosition.z);
+            return new Vector3(-velocity.x, avgForce / contacts, -velocity.z);
         }
 
         public void UpdateValues()

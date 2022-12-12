@@ -7,7 +7,7 @@ namespace Burnout
         public Wheel[] wheels = new Wheel[4];
 
         public Rigidbody body;
-        private Vector3 input;
+        public Vector3 input;
 
         [SerializeField]
         public Spring spring;
@@ -20,7 +20,11 @@ namespace Burnout
         {
             //body.AddForce(10000f * transform.forward, ForceMode.Impulse);
 
-            for (int i = 0; i < wheelCount; i++) { wheels[i].Init(this); }
+            for (int i = 0; i < wheelCount; i++)
+            {
+                if(i < 2) { wheels[i].isSteerable = true; }
+                wheels[i].Init(this);
+            }
         }
 
         private void FixedUpdate()
@@ -28,12 +32,19 @@ namespace Burnout
             // Gravity
             body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
 
-            foreach(var obj in wheels) { obj.FixedUpdate(); }
+            foreach(var obj in wheels)
+            {
+                obj.wishVelocity += new Vector3(input.z, 0, input.x);
+
+                obj.FixedUpdate();
+
+                obj.wishVelocity -= new Vector3(input.z, 0, input.x);
+            }
         }
 
         private void Update()
         {
-            input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            input = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
 
             foreach(var obj in wheels) { obj.Update(); }
         }
@@ -48,7 +59,7 @@ namespace Burnout
             foreach(var obj in wheels)
             {
                 float iterations = 10;
-                float degrees = 100;
+                float degrees = 135;
 
                 degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/Circles are limited to 0-360 degrees.
 
@@ -67,7 +78,7 @@ namespace Burnout
 
                     Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, transform.right); // Pure hatred for Quaternions.
 
-                    Gizmos.DrawRay(obj.transform.position, dir * transform.up);
+                    Gizmos.DrawRay(obj.transform.position, (dir * transform.up) * (wheelRadius * 2));
 
                     angleCurr += angleDiff;
                 }
