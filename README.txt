@@ -6,3 +6,5 @@ Wheel -> Raycast(GetSurfaceFriction) -> Calculate(GetWishForce[Torque * Friction
 
 Force = Stiffness * CompressionRate(speed) * AmtOfCompression(hitpos)
 https://vehiclephysics.com/advanced/how-suspensions-work/
+
+https://github.com/JustInvoke/Randomation-Vehicle-Physics/blob/master/Assets/Scripts/Suspension/Suspension.cs

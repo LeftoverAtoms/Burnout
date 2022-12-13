@@ -15,7 +15,7 @@ namespace Burnout
         //private GameObject entity;
         public Transform transform;
 
-        public Vector3 wishVelocity = Vector3.zero;
+        public Vector3 wishVelocity;
 
         public void Init(Vehicle parent)
         {
@@ -30,9 +30,13 @@ namespace Burnout
 
         public void FixedUpdate()
         {
-            Vector3 velocity = CastRays(135, 10);
+            Vector3 velocity = owner.body.GetPointVelocity(transform.position);
 
-            owner.body.AddRelativeForce(wishVelocity + velocity, ForceMode.Acceleration);
+            Vector3 springForce = CalculateSpringForce(135, 10, velocity);
+
+            Debug.Log(springForce);
+
+            owner.body.AddRelativeForce(wishVelocity + springForce, ForceMode.Acceleration);
         }
 
         public void Update()
@@ -40,36 +44,39 @@ namespace Burnout
         }
 
         // NOTE: These variables should only be calculated once! NOT EVERY PHYSICS FRAME!
-        private Vector3 CastRays(float degrees, float iterations)
+        private Vector3 CalculateSpringForce(float degrees, float iterations, Vector3 velocity)
         {
-            Vector3 velocity = owner.body.GetPointVelocity(transform.position);
-
             degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/Circles are limited to 0-360 degrees.
 
             float angleDiff = (degrees / iterations); // Degrees between each raycast.
             float angleCurr = (angleDiff / 2);
 
-            float rotationOffset = (angleDiff * (iterations / 2)) + (180 - degrees); // MAGIC!
+            float rotationOffset = (angleDiff * (iterations / 2)) + (180 - degrees);
 
-            float avgForce = 0;
-            int contacts = 0;
+            Quaternion dirCompression = default;
+            float mostCompression = default;
 
             for (uint i = 0; i < iterations; i++)
             {
-                Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, transform.right); // Pure hatred for Quaternions.
+                Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, transform.right);
 
-                if (Physics.Raycast(transform.position, dir * owner.transform.up, out RaycastHit hit, owner.wheelRadius + 0.1f))
+                if (Physics.Raycast(transform.position, dir * owner.transform.up, out RaycastHit hit, (owner.wheelRadius * 2) + 0.1f))
                 {
-                    spring.offset = spring.restLength - hit.distance;
-
-                    avgForce += (spring.offset * spring.strength) - (velocity.y * spring.damping);
-                    contacts += 1;
+                    float compression = spring.restLength - hit.distance;
+                    if (compression < mostCompression)
+                    {
+                        mostCompression = compression;
+                        dirCompression = dir;
+                    }
                 }
 
                 angleCurr += angleDiff;
             }
 
-            return new Vector3(-velocity.x, avgForce / contacts, -velocity.z);
+            spring.offset = mostCompression;
+
+            var force = (spring.offset * spring.strength) - (velocity.y * spring.damping);
+            return (dirCompression * owner.transform.up) * force;
         }
 
         public void UpdateValues()

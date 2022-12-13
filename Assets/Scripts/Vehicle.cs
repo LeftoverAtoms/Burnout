@@ -18,8 +18,6 @@ namespace Burnout
 
         private void Start()
         {
-            //body.AddForce(10000f * transform.forward, ForceMode.Impulse);
-
             for (int i = 0; i < wheelCount; i++)
             {
                 if(i < 2) { wheels[i].isSteerable = true; }
@@ -30,7 +28,7 @@ namespace Burnout
         private void FixedUpdate()
         {
             // Gravity
-            body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
+            //body.velocity = new Vector3(body.velocity.x, Mathf.Clamp(body.velocity.y, -54f, 54f), body.velocity.z);
 
             foreach(var obj in wheels)
             {
@@ -66,7 +64,7 @@ namespace Burnout
                 float angleDiff = (degrees / iterations); // Degrees between each raycast.
                 float angleCurr = (angleDiff / 2);
 
-                float offset = (angleDiff * (iterations / 2)) + (180 - degrees); // MAGIC!
+                float offset = (angleDiff * (iterations / 2)) + (180 - degrees);
 
                 for(uint i = 0; i < iterations; i++)
                 {
@@ -76,13 +74,12 @@ namespace Burnout
                     else if(c < 0.75f) { Gizmos.color = new Color(0, 0, 1, 1); }
                     else if(c < 1.00f) { Gizmos.color = new Color(1, 1, 1, 1); }
 
-                    Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, transform.right); // Pure hatred for Quaternions.
+                    Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, transform.right);
 
-                    Gizmos.DrawRay(obj.transform.position, (dir * transform.up) * (wheelRadius * 2));
+                    Gizmos.DrawRay(obj.transform.position, dir * transform.up * (wheelRadius + 0.1f));
 
                     angleCurr += angleDiff;
                 }
-
 
                 /*
                 Gizmos.color = Color.magenta;
