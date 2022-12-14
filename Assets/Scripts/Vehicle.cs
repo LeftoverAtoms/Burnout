@@ -4,6 +4,30 @@ namespace Burnout
 {
     public class Vehicle : MonoBehaviour
     {
+        public WheelCollider[] wheels;
+
+        public Rigidbody body;
+        public Vector3 input;
+
+        private void Update()
+        {
+            input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            for(int i = 0; i < wheels.Length + 1; i++)
+            {
+                if (i <= 1)
+                {
+                    wheels[i].steerAngle += input.x;
+                    wheels[i].steerAngle = Mathf.Clamp(wheels[i].steerAngle, -135, 135);
+                }
+                else if (i <= 3)
+                {
+                    wheels[i].motorTorque += input.z;
+                }
+            }
+        }
+
+        /*
         public Wheel[] wheels = new Wheel[4];
 
         public Rigidbody body;
@@ -32,11 +56,11 @@ namespace Burnout
 
             foreach(var obj in wheels)
             {
-                obj.wishVelocity += new Vector3(input.z, 0, input.x);
+                obj.wishVelocity += new Vector3(input.z * 5, 0, input.x);
 
                 obj.FixedUpdate();
 
-                obj.wishVelocity -= new Vector3(input.z, 0, input.x);
+                obj.wishVelocity -= new Vector3(input.z * 5, 0, input.x);
             }
         }
 
@@ -76,20 +100,21 @@ namespace Burnout
 
                     Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, transform.right);
 
-                    Gizmos.DrawRay(obj.transform.position, dir * transform.up * (wheelRadius + 0.1f));
+                    Vector3 start = obj.transform.position + (transform.up * obj.spring.offset);
+
+                    Gizmos.DrawRay(start, dir * transform.up * (wheelRadius + 0.1f));
 
                     angleCurr += angleDiff;
                 }
 
-                /*
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(obj.transform.position + new Vector3(0f, spring.maxRange + wheelRadius, 0f), 0.1f);
                 Gizmos.DrawWireSphere(obj.transform.position - new Vector3(0f, spring.minRange + wheelRadius, 0f), 0.1f);
 
                 Gizmos.color = Color.gray;
                 Gizmos.DrawLine(obj.transform.position + new Vector3(0f, spring.maxRange, 0f), obj.transform.position - new Vector3(0f, spring.minRange, 0f));
-                */
             }
         }
+        */
     }
 }

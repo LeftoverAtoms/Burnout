@@ -1,3 +1,4 @@
+/*
 using System;
 using UnityEngine;
 
@@ -34,9 +35,7 @@ namespace Burnout
 
             Vector3 springForce = CalculateSpringForce(135, 10, velocity);
 
-            Debug.Log(springForce);
-
-            owner.body.AddRelativeForce(wishVelocity + springForce, ForceMode.Acceleration);
+            owner.body.AddForceAtPosition(owner.transform.TransformVector(wishVelocity + springForce), transform.position, ForceMode.Acceleration);
         }
 
         public void Update()
@@ -53,30 +52,32 @@ namespace Burnout
 
             float rotationOffset = (angleDiff * (iterations / 2)) + (180 - degrees);
 
-            Quaternion dirCompression = default;
-            float mostCompression = default;
+            float avgForce = 0;
+            float greatOffset = 0;
+            int contacts = 0;
 
             for (uint i = 0; i < iterations; i++)
             {
                 Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, transform.right);
 
-                if (Physics.Raycast(transform.position, dir * owner.transform.up, out RaycastHit hit, (owner.wheelRadius * 2) + 0.1f))
+                Vector3 start = transform.position + (owner.transform.up * spring.offset);
+
+                if (Physics.Raycast(start, dir * owner.transform.up, out RaycastHit hit, (owner.wheelRadius * 2) + 0.1f))
                 {
-                    float compression = spring.restLength - hit.distance;
-                    if (compression < mostCompression)
-                    {
-                        mostCompression = compression;
-                        dirCompression = dir;
-                    }
+                    var offset = spring.restLength - hit.distance;
+
+                    if(offset < greatOffset) { greatOffset = offset; }
+
+                    avgForce += (offset * spring.strength) - (velocity.y * spring.damping);
+                    contacts++;
                 }
 
                 angleCurr += angleDiff;
             }
 
-            spring.offset = mostCompression;
+            spring.offset = greatOffset;
 
-            var force = (spring.offset * spring.strength) - (velocity.y * spring.damping);
-            return (dirCompression * owner.transform.up) * force;
+            return new Vector3(0, avgForce / contacts, 0);
         }
 
         public void UpdateValues()
@@ -93,3 +94,4 @@ namespace Burnout
         }
     }
 }
+*/
