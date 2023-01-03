@@ -4,21 +4,19 @@ using UnityEngine;
 namespace Burnout
 {
     [Serializable]
-    public class Axle : MonoBehaviour
+    public class Axle
     {
-        [HideInInspector]
-        public Wheel leftWheel, rightWheel;
+        public Wheel leftWheel;
+        public Wheel rightWheel;
 
-        public float antiRoll = 1;
+        public float antiRollStrength = 1;
 
-        private void FixedUpdate()
+        public void FixedUpdate()
         {
-            // Calculate force per wheel with antiRollForce -> Apply forces.
-            
-            float antiRollForce = (leftWheel.spring.offset - rightWheel.spring.offset) * antiRoll;
+            Vector3 antiRollForce = Vector3.up * ((leftWheel.spring.offset - rightWheel.spring.offset) * antiRollStrength);
 
-            leftWheel.ApplyForce();
-            rightWheel.ApplyForce();
+            leftWheel.ApplyForce(leftWheel.wishVelocity + antiRollForce);
+            rightWheel.ApplyForce(rightWheel.wishVelocity + antiRollForce);
         }
     }
 }

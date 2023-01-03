@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Burnout
 {
-    [Serializable]
     public class Wheel : MonoBehaviour
     {
         [HideInInspector] public Vehicle owner;
@@ -25,9 +24,9 @@ namespace Burnout
             CastRays(100, 10);
         }
 
-        public void ApplyForce()
+        public void ApplyForce(Vector3 force)
         {
-            owner.body.AddForceAtPosition(wishVelocity, transform.position, ForceMode.Acceleration);
+            owner.body.AddForceAtPosition(owner.transform.TransformPoint(force), transform.position, ForceMode.Acceleration);
         }
 
         ///<summary> NOTE: These variables should only be calculated once! NOT EVERY PHYSICS FRAME! </summary>

@@ -2769,8 +2769,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axles:
-  - {fileID: 0}
-  - {fileID: 0}
+  - leftWheel: {fileID: 0}
+    rightWheel: {fileID: 0}
+    antiRollStrength: 1
+  - leftWheel: {fileID: 0}
+    rightWheel: {fileID: 0}
+    antiRollStrength: 1
   body: {fileID: 1650719695}
   spring:
     force: 0
