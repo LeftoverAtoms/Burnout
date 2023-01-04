@@ -1,31 +1,43 @@
+using System;
 using UnityEngine;
 
 namespace Burnout
 {
-    public class Axle : MonoBehaviour
+    [Serializable]
+    public class Axle
     {
-        public Wheel leftWheel;
-        public Wheel rightWheel;
+        //[HideInInspector]
+        public Transform transform;
+
+        private Wheel leftWheel;
+        private Wheel rightWheel;
 
         public float antiRollStrength = 1;
 
-        public float localWheelPosition;
-
-        private void Awake()
+        // Stopping Point: Does the new keyword not work in constructors? Same with Debug.Logs?
+        public Axle(Vehicle parent, float wheel_offset)
         {
-            leftWheel = this.gameObject.AddComponent<Wheel>();
-            rightWheel = this.gameObject.AddComponent<Wheel>();
+            transform.parent = parent.transform;
 
-            leftWheel.transform.localPosition = transform.localPosition + (Vector3.left * localWheelPosition);
-            rightWheel.transform.localPosition = transform.localPosition + (Vector3.right * localWheelPosition);
+            leftWheel = new Wheel(this);
+            rightWheel = new Wheel(this);
+
+            leftWheel.transform.localPosition = transform.localPosition + (Vector3.left * wheel_offset);
+            rightWheel.transform.localPosition = transform.localPosition + (Vector3.right * wheel_offset);
         }
 
-        private void FixedUpdate()
+        public void SimulateWheels()
         {
-            Vector3 antiRollForce = Vector3.up * ((leftWheel.spring.offset - rightWheel.spring.offset) * antiRollStrength);
+            Vector3 antiRollForce = (leftWheel.spring.offset - rightWheel.spring.offset) * antiRollStrength * Vector3.up;
 
-            leftWheel.ApplyForce(leftWheel.wishVelocity + antiRollForce);
-            rightWheel.ApplyForce(rightWheel.wishVelocity + antiRollForce);
+            leftWheel.ApplySpringForce(antiRollForce);
+            rightWheel.ApplySpringForce(antiRollForce);
+        }
+
+        public void DrawGizmos()
+        {
+            leftWheel?.DrawGizmos();
+            rightWheel?.DrawGizmos();
         }
     }
 }
