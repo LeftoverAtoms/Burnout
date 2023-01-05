@@ -4,25 +4,21 @@ namespace Burnout
 {
     public class Wheel
     {
-        public Transform transform;
+        public Vehicle Veh;
+        public Spring Spring;
 
-        public Vehicle veh;
-        public Axle axle;
+        public Vector3 Position;
+        public Vector3 LocalPosition;
 
-        public Spring spring;
-
-        public Wheel(Axle parent)
+        public Wheel(Vehicle veh)
         {
-            axle = parent;
-            veh = axle.transform.parent.GetComponent<Vehicle>();
-
-            transform.position = veh.transform.TransformPoint(transform.localPosition);
+            Veh = veh;
         }
 
-        public void ApplySpringForce(Vector3 force)
+        public void ApplySpringForce(Vector3 additional = default)
         {
-            force += GetSpringForce(100, 10);
-            veh.body.AddForceAtPosition(veh.transform.TransformPoint(force), transform.position, ForceMode.Acceleration);
+            additional += GetSpringForce(100, 10);
+            Veh.Body.AddForceAtPosition(Veh.transform.TransformPoint(additional), Position, ForceMode.Acceleration);
         }
 
         private Vector3 GetSpringForce(float degrees, float iterations)
@@ -41,15 +37,15 @@ namespace Burnout
 
             for (uint i = 0; i < iterations; i++)
             {
-                Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, transform.right);
+                Quaternion dir = Quaternion.AngleAxis(angleCurr + rotationOffset, Veh.transform.right);
 
-                if (Physics.Raycast(transform.position, dir * veh.transform.up, out RaycastHit hit, veh.wheelRadius + 0.1f))
+                if (Physics.Raycast(Position, dir * Veh.transform.up, out RaycastHit hit, Veh.WheelRadius + 0.1f))
                 {
-                    Vector3 velocity = veh.body.GetPointVelocity(transform.position);
+                    Vector3 velocity = Veh.Body.GetPointVelocity(Position);
 
-                    spring.offset = veh.spring.restLength - hit.distance;
+                    Spring.offset = Veh.Spring.restLength - hit.distance;
 
-                    avgForce += (spring.offset * veh.spring.strength) - (velocity.y * veh.spring.damping);
+                    avgForce += (Spring.offset * Veh.Spring.strength) - (velocity.y * Veh.Spring.damping);
                     contacts += 1;
                 }
 
@@ -82,9 +78,9 @@ namespace Burnout
                 else if (c < 0.75f) { Gizmos.color = new Color(0, 0, 1, 1); }
                 else if (c < 1.00f) { Gizmos.color = new Color(1, 1, 1, 1); }
 
-                Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, veh.transform.right);
+                Quaternion dir = Quaternion.AngleAxis(angleCurr + offset, Veh.transform.right);
 
-                Gizmos.DrawRay(transform.position, dir * veh.transform.up);
+                Gizmos.DrawRay(Position, dir * Veh.transform.up);
 
                 angleCurr += angleDiff;
             }

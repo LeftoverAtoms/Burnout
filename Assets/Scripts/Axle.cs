@@ -6,38 +6,46 @@ namespace Burnout
     [Serializable]
     public class Axle
     {
-        //[HideInInspector]
-        public Transform transform;
+        public Vehicle Vehicle;
 
-        private Wheel leftWheel;
-        private Wheel rightWheel;
+        public Vector3 Position;
+        public Vector3 LocalPosition;
 
-        public float antiRollStrength = 1;
+        private Wheel LeftWheel;
+        private Wheel RightWheel;
 
-        // Stopping Point: Does the new keyword not work in constructors? Same with Debug.Logs?
-        public Axle(Vehicle parent, float wheel_offset)
+        public float AntiRollStrength = 1;
+
+        public Axle(Vector3 axle_offset, float wheel_offset, Vehicle parent)
         {
-            transform.parent = parent.transform;
+            LocalPosition = axle_offset;
 
-            leftWheel = new Wheel(this);
-            rightWheel = new Wheel(this);
+            Vehicle = parent;
 
-            leftWheel.transform.localPosition = transform.localPosition + (Vector3.left * wheel_offset);
-            rightWheel.transform.localPosition = transform.localPosition + (Vector3.right * wheel_offset);
+            LeftWheel = new Wheel(parent);
+            RightWheel = new Wheel(parent);
+
+            LeftWheel.LocalPosition = axle_offset + (Vector3.left * wheel_offset);
+            RightWheel.LocalPosition = axle_offset + (Vector3.right * wheel_offset);
         }
 
         public void SimulateWheels()
         {
-            Vector3 antiRollForce = (leftWheel.spring.offset - rightWheel.spring.offset) * antiRollStrength * Vector3.up;
+            // Convert LocalPosition to worldspace. [Cannot use Transform in classes without inheriting MonoBehaviour]
+            LeftWheel.Position = (Vehicle.transform.rotation * LeftWheel.LocalPosition) + Vehicle.transform.position;
+            RightWheel.Position = (Vehicle.transform.rotation * RightWheel.LocalPosition) + Vehicle.transform.position;
+            Position = (Vehicle.transform.rotation * LocalPosition) + Vehicle.transform.position;
 
-            leftWheel.ApplySpringForce(antiRollForce);
-            rightWheel.ApplySpringForce(antiRollForce);
+            Vector3 anti_roll_force = (LeftWheel.Spring.offset - RightWheel.Spring.offset) * AntiRollStrength * Vector3.up;
+
+            LeftWheel.ApplySpringForce(anti_roll_force);
+            RightWheel.ApplySpringForce(anti_roll_force);
         }
 
         public void DrawGizmos()
         {
-            leftWheel?.DrawGizmos();
-            rightWheel?.DrawGizmos();
+            LeftWheel?.DrawGizmos();
+            RightWheel?.DrawGizmos();
         }
     }
 }

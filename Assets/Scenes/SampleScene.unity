@@ -2768,19 +2768,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cadc335d07dad1146a9ae60543950ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axles:
-  - {fileID: 0}
-  - {fileID: 0}
-  body: {fileID: 1650719695}
-  spring:
+  Body: {fileID: 0}
+  Spring:
     force: 0
     offset: 0
-    range: {x: 0, y: 0}
+    range: {x: 0, y: 0.5}
     strength: 1
     damping: 1
-    restLength: 1
-  wheelPrefab: {fileID: 3010596899765650701, guid: 64926f524822e9243a7d0976e9cf9828, type: 3}
-  wheelRadius: 0.5
+    restLength: 0.5
+  Axles:
+  - Vehicle: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0}
+    LocalPosition: {x: 0, y: 0, z: 0}
+    AntiRollStrength: 0
+  - Vehicle: {fileID: 0}
+    Position: {x: 0, y: 0, z: 0}
+    LocalPosition: {x: 0, y: 0, z: 0}
+    AntiRollStrength: 0
+  WheelRadius: 0
 --- !u!4 &251498752
 Transform:
   m_ObjectHideFlags: 0
