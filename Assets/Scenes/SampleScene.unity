@@ -2773,8 +2773,8 @@ MonoBehaviour:
     force: 0
     offset: 0
     range: {x: 0, y: 0.5}
-    strength: 1
-    damping: 1
+    strength: 100
+    damping: 0.1
     restLength: 0.5
   Axles:
   - Vehicle: {fileID: 0}
@@ -3420,7 +3420,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &253034472
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3939,7 +3939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1042435651
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4097,7 +4097,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1791142617
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4324,7 +4324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &2112553339
 MeshCollider:
   m_ObjectHideFlags: 0

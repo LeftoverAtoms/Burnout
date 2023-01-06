@@ -18,7 +18,7 @@ namespace Burnout
         public void ApplySpringForce(Vector3 additional = default)
         {
             additional += GetSpringForce(100, 10);
-            Veh.Body.AddForceAtPosition(Veh.transform.TransformPoint(additional), Position, ForceMode.Acceleration);
+            Veh.Body.AddForceAtPosition(Veh.transform.TransformVector(additional), Position, ForceMode.Acceleration);
         }
 
         private Vector3 GetSpringForce(float degrees, float iterations)

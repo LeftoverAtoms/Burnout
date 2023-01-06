@@ -36,10 +36,10 @@ namespace Burnout
             RightWheel.Position = (Vehicle.transform.rotation * RightWheel.LocalPosition) + Vehicle.transform.position;
             Position = (Vehicle.transform.rotation * LocalPosition) + Vehicle.transform.position;
 
-            Vector3 anti_roll_force = (LeftWheel.Spring.offset - RightWheel.Spring.offset) * AntiRollStrength * Vector3.up;
+            Vector3 anti_roll_force = (LeftWheel.Spring.offset - RightWheel.Spring.offset) * AntiRollStrength * Vehicle.transform.up;
 
-            LeftWheel.ApplySpringForce(anti_roll_force);
-            RightWheel.ApplySpringForce(anti_roll_force);
+            LeftWheel.ApplySpringForce(Vector3.zero);
+            RightWheel.ApplySpringForce(Vector3.zero);
         }
 
         public void DrawGizmos()

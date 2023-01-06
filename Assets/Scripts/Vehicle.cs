@@ -25,15 +25,12 @@ namespace Burnout
             Axles[1] = new Axle(new Vector3(0, 0.5f, -1.85f), 0.85f, this);
         }
 
-        private void FixedUpdate()
-        {
-            Axles[0].SimulateWheels();
-            Axles[1].SimulateWheels();
-        }
-
         private void Update()
         {
             InputDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            Axles[0].SimulateWheels();
+            Axles[1].SimulateWheels();
         }
 
         private void OnDrawGizmos()
