@@ -17,10 +17,13 @@ namespace Burnout
 
         public void ApplySpringForce(Vector3 additional = default)
         {
-            additional += GetSpringForce(100, 10);
+            additional += GetSpringForce(180, 10);
             Veh.Body.AddForceAtPosition(Veh.transform.TransformVector(additional), Position, ForceMode.Acceleration);
         }
 
+        // I believe raycasts are the wrong way to go...
+        //https://docs.unity3d.com/ScriptReference/Physics.CapsuleCast.html
+        //http://answers.unity.com/answers/1781142/view.html
         private Vector3 GetSpringForce(float degrees, float iterations)
         {
             degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/circles are limited to 0-360 degrees.
@@ -30,10 +33,10 @@ namespace Burnout
 
             float rotationOffset = (angleDiff * (iterations / 2)) + (180 - degrees);
 
-            float avgForce = 0;
+            Vector3 avgForce = Vector3.zero;
             int contacts = 0;
 
-            float force;
+            Vector3 velocity = Veh.Body.GetPointVelocity(Position);
 
             for (uint i = 0; i < iterations; i++)
             {
@@ -41,26 +44,24 @@ namespace Burnout
 
                 if (Physics.Raycast(Position, dir * Veh.transform.up, out RaycastHit hit, Veh.WheelRadius + 0.1f))
                 {
-                    Vector3 velocity = Veh.Body.GetPointVelocity(Position);
-
                     Spring.offset = Veh.Spring.restLength - hit.distance;
 
-                    avgForce += (Spring.offset * Veh.Spring.strength) - (velocity.y * Veh.Spring.damping);
+                    float force = (Spring.offset * Veh.Spring.strength) - (velocity.y * Veh.Spring.damping);
+                    Debug.Log(dir * new Vector3(0, force, 0));
+                    avgForce += dir * new Vector3(0, force, 0);
+
                     contacts += 1;
                 }
 
                 angleCurr += angleDiff;
             }
 
-            if (contacts > 0) { force = avgForce / contacts; }
-            else { force = 0; }
-
-            return new Vector3(0, force, 0);
+            return contacts > 0 ? -avgForce : Vector3.zero;
         }
 
         public void DrawGizmos()
         {
-            float degrees = 100;
+            float degrees = 180;
             float iterations = 10;
 
             degrees = Mathf.Clamp(degrees, 0, 360); // Arcs/circles are limited to 0-360 degrees.
