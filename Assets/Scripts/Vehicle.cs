@@ -28,6 +28,7 @@ namespace Burnout
         private void Update()
         {
             InputDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            Body.AddRelativeForce(InputDirection * 10, ForceMode.Acceleration);
 
             Axles[0].SimulateWheels();
             Axles[1].SimulateWheels();

@@ -4,29 +4,37 @@ namespace Burnout
 {
     public class Wheel : Object
     {
-        public Vehicle Veh;
+        public Vehicle Vehicle;
         public Spring Spring;
+
+        private RaycastHit Hit;
+        private bool IsGrounded;
 
         public Wheel(Vehicle veh)
         {
-            Veh = veh;
+            Vehicle = veh;
         }
 
-        public void ApplySpringForce(Vector3 additional = default)
+        public void ApplyForce(Vector3 additive = default)
         {
-            additional += GetSpringForce();
-            Veh.Body.AddForceAtPosition(Veh.transform.TransformVector(additional), Position, ForceMode.Acceleration);
+            Vector3 velocity = Vehicle.Body.GetPointVelocity(Position);
+            Vector3 force = Vector3.zero;
+
+            Debug.Log(velocity);
+
+            force += SpringForce(velocity);
+            
+            //force += additive;
+
+            Vehicle.Body.AddForceAtPosition(Vehicle.transform.TransformVector(force), Position, ForceMode.Acceleration);
         }
 
-        RaycastHit Hit;
-        bool IsGrounded;
-
-        public Vector3 GetSpringForce()
+        public Vector3 SpringForce(Vector3 velocity)
         {
-            RaycastHit[] contacts = Physics.SphereCastAll(Position, 0, Vector3.down, Veh.WheelRadius); // Radius and MaxDistance are misleading.
             IsGrounded = false;
 
-            // Check for the bottom-most contact and that is Spring.Offset -> Using contact.normal convert to direction vector3 then calculate force.
+            RaycastHit[] contacts = Physics.SphereCastAll(Position, 0, Vector3.down, Vehicle.WheelRadius);
+
             float distance = float.MaxValue;
             for(int i = 0; i < contacts.Length; i++)
             {
@@ -41,26 +49,26 @@ namespace Burnout
 
             if (IsGrounded)
             {
-                Vector3 velocity = Veh.Body.GetPointVelocity(Position);
+                Spring.Offset = Vehicle.Spring.RestLength - Hit.distance;
 
-                Spring.offset = Veh.Spring.restLength - Hit.distance;
-
-                float force = (Spring.offset * Veh.Spring.strength) - (velocity.y * Veh.Spring.damping);
+                float force = (Spring.Offset * Vehicle.Spring.Strength) - (velocity.y * Vehicle.Spring.Damping);
                 return new Vector3(0, force, 0);
             }
-
-            return Vector3.zero;
+            else
+            {
+                return Vector3.zero;
+            }
         }
 
         public void DrawGizmos()
         {
             Gizmos.color = Color.white;
-            Gizmos.DrawWireSphere(Position, Veh.WheelRadius);
+            Gizmos.DrawWireSphere(Position, Vehicle.WheelRadius);
 
             if (IsGrounded)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawRay(Position, Veh.transform.up - Hit.normal * 10);
+                Gizmos.DrawRay(Position, Vehicle.transform.up - Hit.normal * 10);
             }
         }
     }

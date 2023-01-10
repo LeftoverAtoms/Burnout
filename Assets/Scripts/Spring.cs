@@ -6,12 +6,12 @@ namespace Burnout
     [Serializable]
     public struct Spring
     {
-        [HideInInspector] public float force, offset;
+        [HideInInspector] public float Force, Offset;
 
-        public Vector2 range;
-        public float maxRange => range.x;
-        public float minRange => range.y;
+        public Vector2 Range;
+        public float MaxRange => Range.x;
+        public float MinRange => Range.y;
 
-        public float strength, damping, restLength;
+        public float Strength, Damping, RestLength;
     }
 }
