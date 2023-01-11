@@ -15,18 +15,17 @@ namespace Burnout
             Vehicle = veh;
         }
 
-        public void ApplyForce(Vector3 additive = default)
+        public void Simulate()
         {
-            Vector3 velocity = Vehicle.Body.GetPointVelocity(Position);
+            Vector3 velocity = Quaternion.Euler(Vehicle.transform.forward) * Vehicle.Body.GetRelativePointVelocity(Position);
             Vector3 force = Vector3.zero;
 
-            Debug.Log(velocity);
-
             force += SpringForce(velocity);
-            
-            //force += additive;
 
-            Vehicle.Body.AddForceAtPosition(Vehicle.transform.TransformVector(force), Position, ForceMode.Acceleration);
+            //Subtract velocity.x to negate sliding.
+
+            ApplyForceAtPosition(force);
+            //ApplyForce(velocity.x * -Vehicle.transform.right);
         }
 
         public Vector3 SpringForce(Vector3 velocity)
@@ -59,6 +58,10 @@ namespace Burnout
                 return Vector3.zero;
             }
         }
+
+        public void ApplyForceAtPosition(Vector3 force) => Vehicle.Body.AddForceAtPosition(Vehicle.transform.TransformVector(force), Position, ForceMode.Acceleration);
+        
+        public void ApplyForce(Vector3 force) => Vehicle.Body.AddForce(Vehicle.transform.TransformVector(force), ForceMode.Acceleration);
 
         public void DrawGizmos()
         {

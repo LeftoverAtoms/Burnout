@@ -20,6 +20,7 @@ namespace Burnout
         private void Start()
         {
             Body = gameObject.GetComponent<Rigidbody>();
+            Body.centerOfMass = transform.position;
 
             Axles[0] = new Axle(new Vector3(0, 0.5f, 1.95f), 0.85f, this);
             Axles[1] = new Axle(new Vector3(0, 0.5f, -1.85f), 0.85f, this);
