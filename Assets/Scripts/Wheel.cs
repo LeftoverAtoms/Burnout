@@ -10,22 +10,21 @@ namespace Burnout
         private RaycastHit Hit;
         private bool IsGrounded;
 
-        public Wheel(Vehicle veh)
+        public Wheel(Vehicle obj)
         {
-            Vehicle = veh;
+            Vehicle = obj;
         }
 
         public void Simulate()
         {
-            Vector3 velocity = Quaternion.Euler(Vehicle.transform.forward) * Vehicle.Body.GetRelativePointVelocity(Position);
+            Vector3 velocity = Vehicle.Body.velocity;
             Vector3 force = Vector3.zero;
 
             force += SpringForce(velocity);
 
-            //Subtract velocity.x to negate sliding.
+            //force.x -= (Quaternion.Euler(Vehicle.transform.forward) * velocity).x * 0.25f;
 
-            ApplyForceAtPosition(force);
-            //ApplyForce(velocity.x * -Vehicle.transform.right);
+            if (IsGrounded) ApplyForceAtPosition(force);
         }
 
         public Vector3 SpringForce(Vector3 velocity)
@@ -60,8 +59,6 @@ namespace Burnout
         }
 
         public void ApplyForceAtPosition(Vector3 force) => Vehicle.Body.AddForceAtPosition(Vehicle.transform.TransformVector(force), Position, ForceMode.Acceleration);
-        
-        public void ApplyForce(Vector3 force) => Vehicle.Body.AddForce(Vehicle.transform.TransformVector(force), ForceMode.Acceleration);
 
         public void DrawGizmos()
         {
@@ -71,7 +68,7 @@ namespace Burnout
             if (IsGrounded)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawRay(Position, Vehicle.transform.up - Hit.normal * 10);
+                Gizmos.DrawRay(Position, Vehicle.transform.up - Hit.normal * 2);
             }
         }
     }

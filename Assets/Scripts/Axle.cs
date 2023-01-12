@@ -6,12 +6,13 @@ namespace Burnout
     [Serializable]
     public class Axle : Object
     {
-        public Vehicle Vehicle;
+        private Vehicle Vehicle;
 
         private Wheel LeftWheel;
         private Wheel RightWheel;
 
-        public float AntiRollStrength = 1;
+        //[SerializeField]
+        //private float AntiRollStrength = 1;
 
         public Axle(Vector3 axle_offset, float wheel_offset, Vehicle parent)
         {

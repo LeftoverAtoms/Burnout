@@ -14,7 +14,6 @@ namespace Burnout
 
         private Vector3 InputDirection;
 
-        //public GameObject wheelPrefab;
         public float WheelRadius;
 
         private void Start()
@@ -29,7 +28,8 @@ namespace Burnout
         private void Update()
         {
             InputDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            Body.AddRelativeForce(InputDirection * 10, ForceMode.Acceleration);
+            Body.AddRelativeForce(InputDirection.z * 2 * Vector3.forward, ForceMode.Acceleration);
+            Body.AddRelativeTorque(InputDirection.x * 0.25f * Vector3.up, ForceMode.Acceleration);
 
             Axles[0].SimulateWheels();
             Axles[1].SimulateWheels();
